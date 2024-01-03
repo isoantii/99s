@@ -1,0 +1,98 @@
+local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
+local Library = require(game.ReplicatedStorage:WaitForChild('Library'))
+
+if not getgenv().a then
+    getgenv().a = true
+    local vu = game:GetService("VirtualUser")
+
+    local ba=Instance.new("ScreenGui")
+    local ca=Instance.new("TextLabel")local da=Instance.new("Frame")
+    local _b=Instance.new("TextLabel")local ab=Instance.new("TextLabel")ba.Parent=game.CoreGui
+    ba.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;ca.Parent=ba;ca.Active=true
+    ca.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)ca.Draggable=true
+    ca.Position=UDim2.new(0.698610067,0,0.098096624,0)ca.Size=UDim2.new(0,300,0,52)
+    ca.Font=Enum.Font.SourceSansSemibold;ca.Text="Fully Loaded"ca.TextColor3=Color3.new(0,1,1)
+    ca.TextSize=22;da.Parent=ca
+    da.BackgroundColor3=Color3.new(0.196078,0.196078,0.196078)da.Position=UDim2.new(0,0,1.0192306,0)
+    da.Size=UDim2.new(0,300,0,107)_b.Parent=da
+    _b.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)_b.Position=UDim2.new(0,0,0.800455689,0)
+    _b.Size=UDim2.new(0,300,0,21)_b.Font=Enum.Font.Arial;_b.Text="isoantii"
+    _b.TextColor3=Color3.new(0,1,1)_b.TextSize=20;ab.Parent=da
+    ab.BackgroundColor3=Color3.new(0.176471,0.176471,0.176471)ab.Position=UDim2.new(0,0,0.158377,0)
+    ab.Size=UDim2.new(0,300,0,44)ab.Font=Enum.Font.ArialBold;ab.Text="working"
+    ab.TextColor3=Color3.new(0,1,1)ab.TextSize=20;
+
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    end)
+end
+
+local function checklisting(uid, gems, item, version, shiny, amount, username, playerid, class)
+    gems = tonumber(gems)
+    local type = {}
+    pcall(function()
+        type = Library.Directory.Pets[item]
+end)
+
+    if class =="Charm" and gems <= 50000 then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    if type.exclusiveLevel and gems <= 50000 and class == "Pet" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.supeiorLevel and gems <=10 and class == "Pet" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.mythicalLevel and gems <=750 and class == "Item" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.legendaryLevel and gems <=550 and class == "Item" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.mythicalLevel and gems <=1000 and class == "Charm" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.legendaryLevel and gems <=1000 and class == "Charm" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif string.find(item, "Exclusive") and gems <= 25000 then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.huge and gems <= 2500000 then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.titanic and gems <= 100000000 then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.legendaryLevel and gems <=100 and class == "Enchant" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.mythicalLevel and gems <=1000 and class == "Enchant" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.exoticLevel and gems <=10000 and class == "Enchant" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.superiorLevel and gems <=100000 and class == "Enchant" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    elseif type.exclusiveLevel and gems <=1000 and class == "Enchant" then
+        game:GetService("ReplicatedStorage").Network.Booths_RequestPurchase:InvokeServer(playerid, uid)
+    end
+end
+
+Booths_Broadcast.OnClientEvent:Connect(function(username, message)
+    if message == nil then return end
+    local playerID = message['PlayerID']
+    if type(message) == "table" then
+        local listing = message["Listings"]
+        for key, value in pairs(listing) do
+            if type(value) == "table" then
+                local uid = key
+                local gems = value["DiamondCost"]
+                local itemdata = value["ItemData"]
+
+                if itemdata then
+                    local data = itemdata["data"]
+
+                    if data then
+                        local item = data["id"]
+                        local version = data["pt"]
+                        local class = itemdata["class"]
+                        local shiny = data["sh"]
+                        local amount = data["_am"]
+                        checklisting(uid, gems, item, version, shiny, amount, username , playerID, class)
+                    end
+                end
+            end
+        end
+    end
+end)
